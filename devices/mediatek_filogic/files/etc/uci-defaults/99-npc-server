@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Configure only the NPC endpoint on first boot. Preserve vkey and other user settings.
+if uci -q get npc.@npc[0] >/dev/null 2>&1; then
+    uci set npc.@npc[0].server_addr='nps.jontao.top'
+    uci set npc.@npc[0].server_port='8024'
+    uci commit npc
+fi
+
+exit 0
