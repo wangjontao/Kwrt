@@ -218,10 +218,15 @@ jobs:
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'false'
-        mixkey: ${{ matrix.target }}
+        mixkey: ${{ matrix.target }}-go125-clean-20260909
         clean: ${{ contains(github.event.action, 'nocache') }}
         prefix: ${{ github.workspace }}/openwrt
 
+    - name: Ensure a fresh Go host toolchain
+      run: |
+        cd openwrt
+        rm -rf staging_dir/hostpkg/lib/go-* build_dir/hostpkg/golang-* tmp/go-build
+        make package/feeds/packages/golang/host/clean || true
     - name: SSH connection to Actions
       uses: kiddin9/debugger-action@master
       if: contains(github.event.action, 'ssh')
